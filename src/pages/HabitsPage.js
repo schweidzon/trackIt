@@ -8,7 +8,7 @@ import Menu from "../components/Menu"
 import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
-    const { user, habits, setHabits, todayHabits, setTodayHabits, setConcluded } = useContext(AppContext)
+    const { user, habits, setHabits, todayHabits, setConcluded } = useContext(AppContext)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
@@ -76,12 +76,14 @@ export default function HabitsPage() {
             .then((res) => {
                 setHabits([...habits, res.data])
                 setIsAddingHabit(false)
+                setLoading(false)
+                setHabitName("")
+                setHabitsDays([])
 
             })
             .catch((err) => console.log(err.response.data))
 
-        setHabitName("")
-        setHabitsDays([])
+      
     }
 
     function deletHabit(habit) {
@@ -117,7 +119,7 @@ export default function HabitsPage() {
                 <HabitsInfo status={isAddingHabit} >
                     <form onSubmit={registerNewHabit}>
                         <div>
-                            <input value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
+                            <input disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
                             <Days >
                                 {DAYS.map((day) =>
                                     <DaysButtons color={habitsDays.includes(day.id)} onClick={() => selectDays(day)} key={day.id}>{day.name.toUpperCase()}</DaysButtons>
@@ -125,8 +127,8 @@ export default function HabitsPage() {
                             </Days>
                             <SendInfos>
                                 <p>Cancelar</p>
-                                {!loading ? <button type="submit">Salvar</button> :
-                                    <Loading>
+                                {!loading ? <button disabled={loading} type="submit">Salvar</button> :
+                                    <Loading disabled={loading}>
                                         <ThreeDots
                                             color="#FFFFFF"
                                             height="60"
@@ -219,6 +221,9 @@ const AddHabitStyle = styled.div`
             color: #FFFFFF;
             text-align: center;
             border-style: none;
+            &:disabled {
+                background-color: #CFCFCF;
+            }
         }
 `
 
@@ -244,6 +249,9 @@ const HabitsInfo = styled.div`
                     font-size: 20px;
                     color: #DBDBDB;;
                 }
+                &:disabled {
+                background-color: #CFCFCF;
+            }
         }
 
 `
@@ -341,7 +349,7 @@ const RegisteredHabits = styled.div`
 `
 
 
-const Loading = styled.div`
+const Loading = styled.button`
      width: 84px;
      height: 35px;
      background: #52B6FF;
@@ -352,6 +360,9 @@ const Loading = styled.div`
      display: flex;
      justify-content: center;
      align-items: center;
+     &:disabled {
+                background-color: #CFCFCF;
+            }
      
         
 `

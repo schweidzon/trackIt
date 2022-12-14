@@ -10,14 +10,19 @@ import dayjs from "dayjs";
 
 
 export default function TodayPage() {
+  
+    
 
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
+   
+    
+    const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
 
     const { user, setConcluded, todayHabits, setTodayHabits } = useContext(AppContext)
     //const [todayHabits, setTodayHabits] = useState([])
     const [reload, setReload] = useState([])
-
+   
 
     useEffect(() => {
 
@@ -109,7 +114,7 @@ export default function TodayPage() {
             <NavBar />
             <HabitsPageStyle >
                 <Day color={render().includes('%')}>
-                    <h1>{`${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${day}`}</h1>
+                    <h1>{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
                     <p>{render()}</p>
                 </Day>
                 <>
