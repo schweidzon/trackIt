@@ -52,6 +52,11 @@ table {
 	text-decoration: none;
 }
 
+#root {
+	position: relative;
+	
+}
+
 `
 
 export default GlobalStyle

@@ -1,10 +1,13 @@
 import axios from "axios"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useContext, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import logo from "../assets/images/logo.png"
+import AppContext from "../context/AppContext"
 
-export default function LoginPage({setToken}) {
+export default function LoginPage() {
+    const {user, setUser} = useContext(AppContext)
+    console.log(user)
     const navigate = useNavigate()
     const[email,setEmail] = useState("")
     const[password,setPassword] = useState("")
@@ -22,7 +25,14 @@ export default function LoginPage({setToken}) {
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
         .then((res) => {
             console.log(res.data)
-            setToken(res.data.token)
+            setUser({
+                email: res.data.email,
+                id: res.data.id,
+                image: res.data.image,
+                name: res.data.name,
+                password: res.data.password,
+                token: res.data.token
+            })
             navigate("/habitos")
         })
         .catch((err) => console.log(err.response.data))
@@ -40,8 +50,10 @@ export default function LoginPage({setToken}) {
                         <button type="submit">Entrar</button>
                     </form>
                 </div>
-
+                <Link to={"/cadastro"}>
                 <p>Não tem conta? Cadastre-se</p>
+                </Link>
+
             </Login>
         </LoginContainer>
 

@@ -1,10 +1,13 @@
+import { useContext } from "react"
 import styled from "styled-components"
+import AppContext from "../context/AppContext"
 
 export default function NavBar() {
+    const {user, setUser} = useContext(AppContext)
     return (
         <Header>
             <h1>TrackIt</h1>
-            <img src="https://akamai.sscdn.co/uploadfile/letras/fotos/5/9/6/2/59625c6b8950a0b058b325f92e478dc9.jpg"/>
+            <img src={user.image}/>
         </Header>
     )
 }

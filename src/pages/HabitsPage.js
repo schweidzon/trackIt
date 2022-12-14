@@ -1,19 +1,23 @@
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
-import NavBar from "../components/NavBar"
+import NavBar from "../components/Header"
+import AppContext from "../context/AppContext"
+import trashCan from "../assets/images/trashCan.png"
 
-export default function HabitsPage({token}) {
+export default function HabitsPage() {
+    const { user, setUser, habits, setHabits } = useContext(AppContext)
 
     useEffect(() => {
+        console.log(user)
         const config = {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${user.token}`
             }
         }
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err.response.data))
+            .then((res) => setHabits(res.data))
+            .catch((err) => console.log(err.response.data))
 
     }, [])
 
@@ -38,13 +42,13 @@ export default function HabitsPage({token}) {
     }
 
     function selectDays(day) {
-        const days = [...habitsDays, day]
+        const days = [...habitsDays, day.id]
         setHabitsDays(days)
         console.log(days)
 
     }
 
-  
+
 
     function registerNewHabit(e) {
         e.preventDefault()
@@ -55,15 +59,36 @@ export default function HabitsPage({token}) {
         }
         const config = {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${user.token}`
             }
         }
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config)
-        .then((res) => console.log(res.data))
-        .catch((err) => console.log(err.response.data))
+            .then((res) => {
+                setHabits([...habits, res.data])
+                console.log(habits)
+            })
+            .catch((err) => console.log(err.response.data))
+
+        setHabitName("")
+        setHabitsDays([])
     }
 
-    
+    function deletHabit(habit) {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        }
+        
+       axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`, config)
+       .then(() => {
+        setHabits(habits.filter((h) => h.id !== habit.id))
+       })
+    }
+
+
+
+
 
     return (
         <>
@@ -76,10 +101,10 @@ export default function HabitsPage({token}) {
                 <HabitsInfo status={isAddingHabit} >
                     <form onSubmit={registerNewHabit}>
                         <div>
-                            <input  value ={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
+                            <input value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
                             <Days >
                                 {DAYS.map((day) =>
-                                    <DaysButtons color={habitsDays.includes(day.id)}  onClick={() => selectDays(day.id)} key={day.id}>{day.name.toUpperCase()}</DaysButtons>
+                                    <DaysButtons color={habitsDays.includes(day.id)} onClick={() => selectDays(day)} key={day.id}>{day.name.toUpperCase()}</DaysButtons>
                                 )}
                             </Days>
                             <SendInfos>
@@ -88,13 +113,31 @@ export default function HabitsPage({token}) {
                             </SendInfos>
                         </div>
                     </form>
-                   
+
                 </HabitsInfo>
-                <NoHabitsText>
+                {habits.map((h) =>
+                    <RegisteresHabits>
+                        <h1>{h.name}</h1>
+                        <img onClick={()=>deletHabit(h)} src={trashCan}/>
+                        <Days>
+                            {DAYS.map((d, i) =>
+                                <ChoosedDays color={(h.days).includes(d.id)}>{d.name.toUpperCase()}</ChoosedDays>
+                            )}
+
+                        </Days>
+
+                    </RegisteresHabits>
+                )}
+
+                {habits.length < 1 &&
+
+                    <NoHabitsText>
                         <p>
                             Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
                         </p>
                     </NoHabitsText>
+                 }
+
 
             </HabitsPageStyle>
         </>
@@ -112,11 +155,16 @@ const NoHabitsText = styled.div`
 `
 
 const HabitsPageStyle = styled.div`
-    margin-top: 15px;
+    padding-top: 15px;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: #E5E5E5;
+    width: 100vw;
+    overflow-y: auto;
+    padding-bottom: 130px;
+    min-height: calc(100vh - 70px);
+  
 `
 
 const AddHabitStyle = styled.div`
@@ -126,6 +174,7 @@ const AddHabitStyle = styled.div`
     justify-content: space-between;
     align-items: center;   
     width: 303px;
+
         h1 {
             font-weight: 400;
             font-size: 22.976px;
@@ -146,7 +195,14 @@ const AddHabitStyle = styled.div`
 const HabitsInfo = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 19px;    
     margin-top: 20px;
+    background-color: #FFFFFF;
+    width: 340px;
+    height: 180px;
+    border-radius: 5px;
     display: ${props => props.status ? "block" : "none"};
         input {
             width: 303px;
@@ -186,13 +242,29 @@ const DaysButtons = styled.div`
 
 `
 
+const ChoosedDays = styled.div`
+    width: 30px;
+    height: 30px;
+    background-color: ${props => props.color ? "#CFCFCF" : "#FFFFFF"};
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+    font-size: 20px;
+    color: #DBDBDB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+
+`
+
 
 const SendInfos = styled.div`
     width: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 10px;
+  
     margin-top: 15px;
         p {
             width: 69px;
@@ -201,6 +273,7 @@ const SendInfos = styled.div`
             color: #52B6FF;
             border: none;
             background-color: #FFFFFF;
+            margin-right: 23px;
             cursor: pointer;
         }
         button:nth-child(2) {
@@ -212,4 +285,27 @@ const SendInfos = styled.div`
             color: #FFFFFF;
             border-style: none;
         }
+`
+
+const RegisteresHabits = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 19px;    
+    margin-top: 20px;
+    background-color: #FFFFFF;
+    width: 340px;
+    border-radius: 5px;
+    position: relative;
+        h1 {
+           font-size:20px ;
+           color: #666666
+        }
+        img {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            cursor: pointer;
+        }
+
 `
