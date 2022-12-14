@@ -1,13 +1,16 @@
 import { useContext } from "react"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import AppContext from "../context/AppContext"
 
 export default function NavBar() {
-    const {user, setUser} = useContext(AppContext)
+    const { user, setUser } = useContext(AppContext)
     return (
         <Header>
-            <h1>TrackIt</h1>
-            <img src={user.image}/>
+            <Link to="/">
+                <h1>TrackIt</h1>
+            </Link>
+            <img src={user.image} />
         </Header>
     )
 }

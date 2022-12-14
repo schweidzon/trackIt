@@ -11,7 +11,7 @@ export default function HabitsPage() {
     const [disabled, setDisabled] = useState(false)
 
     useEffect(() => {
-        console.log(user)
+       
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`

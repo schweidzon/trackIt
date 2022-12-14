@@ -7,7 +7,6 @@ import AppContext from "../context/AppContext"
 
 export default function LoginPage() {
     const {user, setUser} = useContext(AppContext)
-    console.log(user)
     const navigate = useNavigate()
     const[email,setEmail] = useState("")
     const[password,setPassword] = useState("")
@@ -22,7 +21,7 @@ export default function LoginPage() {
             password
         }
 
-        console.log(body)
+       
 
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
         .then((res) => {

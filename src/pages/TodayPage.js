@@ -7,9 +7,11 @@ import AppContext from "../context/AppContext";
 import axios from "axios";
 
 export default function TodayPage() {
-    const { user, habits } = useContext(AppContext)
+    const { user } = useContext(AppContext)
     const [todayHabits, setTodayHabits] = useState([])
-
+    const [reload, setReload] = useState([])
+    const [todayProgress, setTodayProgress] = useState([])
+    let counter = 1
     useEffect(() => {
 
         const config = {
@@ -19,12 +21,80 @@ export default function TodayPage() {
         }
 
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
-        .then(res => setTodayHabits(res.data))
+            .then(res => {
+                const data = res.data
+                setTodayHabits(data)
+               
+               
+            })
+
+        // console.log(counter)
+        // console.log(todayHabits.length)
 
 
-    }, [])
+    }, [reload])
 
-    console.log(habits)
+    function render() {
+     
+       if(todayHabits.find((h) => h.done === true))  {
+            let count = 0
+            todayHabits.map((h) => {
+               if(h.done === true ) {
+                   console.log('true')
+                   count = count + 1
+               }
+             
+            })
+            return `${((count/todayHabits.length)*100)}% dos hábitos concluídos`
+
+        } else {
+            return 'test'
+        }
+    
+       
+     
+  
+    
+    }
+   
+    console.log(todayProgress)
+
+    
+
+
+
+    function finishHabit(habit) {
+        console.log(todayProgress)
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        }
+        const body = {}
+
+
+
+        if (habit.done === true) {
+            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, body, config)
+                .then(() => {
+                    setReload([])
+                   
+                })
+            return
+        }
+
+
+        axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, body, config)
+            .then(() => {
+                setReload([])
+            })
+            .catch(err => console.log(err.response.data))
+
+
+
+    }
+
+
     return (
         <>
             <NavBar />
@@ -32,7 +102,7 @@ export default function TodayPage() {
 
                 <div>
                     <h1></h1>
-                    <p></p>
+                    <p>{render()}</p>
                 </div>
                 <>
                     {todayHabits.map((h) =>
@@ -42,7 +112,7 @@ export default function TodayPage() {
                                 <p>Sequência atual: {h.currentSequence}</p>
                                 <p>Record: {h.highestSequence}</p>
                             </div>
-                            <DoneButton done={h.done}></DoneButton>
+                            <DoneButton onClick={() => finishHabit(h)} done={h.done}></DoneButton>
                         </RegisteredHabits>
 
 
@@ -92,7 +162,7 @@ const RegisteredHabits = styled.div`
         }
 `
 
-const DoneButton = styled.button `
+const DoneButton = styled.button`
     width: 69px;
     height: 69px;
     background-color: ${props => props.done ? "#8FC549" : "#EBEBEB"};
@@ -102,5 +172,6 @@ const DoneButton = styled.button `
     background-repeat: no-repeat;
     background-position: center;
     text-align: center;
+    cursor: pointer;
 `
 
