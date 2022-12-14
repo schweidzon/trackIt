@@ -7,6 +7,7 @@ import RegisterPage from "./pages/RegisterPage";
 import GlobalStyle from "./style/globalStyle";
 import AppProvider from "./context/Provider";
 import Menu from "./components/Menu";
+import TodayPage from "./pages/TodayPage";
 
 function App() {
 
@@ -21,8 +22,9 @@ function App() {
             <Route path="/" element={<LoginPage  />} />
             <Route path="/cadastro" element={<RegisterPage />} />
             <Route path="/habitos" element={<HabitsPage  />} />
+            <Route path="/hoje" element={<TodayPage/>}/>
           </Routes>
-          <Menu/>
+          
         </AppProvider>
       </BrowserRouter>
     </>

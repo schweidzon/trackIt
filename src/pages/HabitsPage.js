@@ -4,9 +4,11 @@ import styled from "styled-components"
 import NavBar from "../components/Header"
 import AppContext from "../context/AppContext"
 import trashCan from "../assets/images/trashCan.png"
+import Menu from "../components/Menu"
 
 export default function HabitsPage() {
     const { user, setUser, habits, setHabits } = useContext(AppContext)
+    const [disabled, setDisabled] = useState(false)
 
     useEffect(() => {
         console.log(user)
@@ -79,11 +81,16 @@ export default function HabitsPage() {
                 Authorization: `Bearer ${user.token}`
             }
         }
+        if(window.confirm("Deseja apagar o hábito?")) {
+            axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`, config)
+            .then(() => {
+             setHabits(habits.filter((h) => h.id !== habit.id))
+            })
+        } else {
+            return
+        }
         
-       axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`, config)
-       .then(() => {
-        setHabits(habits.filter((h) => h.id !== habit.id))
-       })
+      
     }
 
 
@@ -116,7 +123,7 @@ export default function HabitsPage() {
 
                 </HabitsInfo>
                 {habits.map((h) =>
-                    <RegisteresHabits>
+                    <RegisteredHabits>
                         <h1>{h.name}</h1>
                         <img onClick={()=>deletHabit(h)} src={trashCan}/>
                         <Days>
@@ -126,7 +133,7 @@ export default function HabitsPage() {
 
                         </Days>
 
-                    </RegisteresHabits>
+                    </RegisteredHabits>
                 )}
 
                 {habits.length < 1 &&
@@ -138,7 +145,7 @@ export default function HabitsPage() {
                     </NoHabitsText>
                  }
 
-
+                 <Menu/>
             </HabitsPageStyle>
         </>
     )
@@ -287,7 +294,7 @@ const SendInfos = styled.div`
         }
 `
 
-const RegisteresHabits = styled.div`
+const RegisteredHabits = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;

@@ -1,10 +1,13 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 export default function  Menu() {
     return (
         <MenuStyle>
             <p>Hábitos</p>
+            <Link to="/hoje">
             <ToDayButton>Hoje</ToDayButton>
+            </Link>
             <p>Histórico</p>
         </MenuStyle>
     )

@@ -11,9 +11,11 @@ export default function LoginPage() {
     const navigate = useNavigate()
     const[email,setEmail] = useState("")
     const[password,setPassword] = useState("")
+    const [disabled, setDisabled] = useState(false)
 
     function login(e) {
         e.preventDefault()
+        setDisabled(true)
 
         const body = {
             email,
@@ -33,7 +35,9 @@ export default function LoginPage() {
                 password: res.data.password,
                 token: res.data.token
             })
+            setDisabled(false)
             navigate("/habitos")
+            
         })
         .catch((err) => console.log(err.response.data))
 
@@ -44,7 +48,7 @@ export default function LoginPage() {
             <Login>
                 <img src={logo} alt="trackItLogo" />
                 <div>
-                    <form onSubmit={login}>
+                    <form disabled={disabled} onSubmit={login}>
                         <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" />
                         <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="senha" />
                         <button type="submit">Entrar</button>
