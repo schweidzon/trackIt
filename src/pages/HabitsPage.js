@@ -12,6 +12,9 @@ export default function HabitsPage() {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        console.log(todayHabits)
+
+       
 
         const config = {
             headers: {

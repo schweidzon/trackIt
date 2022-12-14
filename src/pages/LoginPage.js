@@ -25,8 +25,6 @@ export default function LoginPage() {
             password
         }
 
-
-
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
             .then((res) => {
                 console.log(res.data)
@@ -40,12 +38,40 @@ export default function LoginPage() {
                 })
                 setDisabled(false)
                 navigate("/habitos")
+                test(res.data.token)
             })
             .catch((err) => {
                 alert(err.response.data.message)
                 window.location.reload()
             })
 
+    }
+
+    function test(token) {
+        console.log(token)
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+
+        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+            .then(res => {
+                const data = res.data
+                if (res.data.find((h) => h.done === true)) {
+                    let count = 0
+                    res.data.forEach((h) => {
+                        if (h.done === true) {
+        
+                            count = count + 1
+                        }
+        
+                    })
+                    setConcluded(((count / res.data.length) * 100).toFixed(2))
+                   
+                }
+                setTodayHabits(data)
+            })
     }
 
     return (
