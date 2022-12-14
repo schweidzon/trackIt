@@ -1,12 +1,35 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { useContext } from "react";
+import AppContext from "../context/AppContext";
 
 export default function  Menu() {
+    const {concluded} = useContext(AppContext)
+
     return (
         <MenuStyle>
+            <Link to={"/habitos"}>
             <p>Hábitos</p>
+            </Link>
             <Link to="/hoje">
-            <ToDayButton>Hoje</ToDayButton>
+            <ToDayButton >
+                <CircularProgressbar                    
+                    value={concluded}                    
+                    text={"Hoje"}
+                    background
+                    backgroundPadding={6}
+                    styles={buildStyles({
+                        backgroundColor: "#3e98c7",
+                        textColor: "#fff",
+                        pathColor: "#fff",
+                        trailColor: "transparent",
+                        
+                        
+                    })}
+                />
+            </ToDayButton>
             </Link>
             <p>Histórico</p>
         </MenuStyle>
@@ -34,7 +57,7 @@ const MenuStyle = styled.div `
 `
 
 
-const ToDayButton = styled.button `
+const ToDayButton = styled.div `
     width: 91px;
     height: 91px;
     background: #52B6FF;

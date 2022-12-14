@@ -5,23 +5,27 @@ import NavBar from "../components/Header"
 import AppContext from "../context/AppContext"
 import trashCan from "../assets/images/trashCan.png"
 import Menu from "../components/Menu"
+import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
-    const { user, setUser, habits, setHabits } = useContext(AppContext)
-    const [disabled, setDisabled] = useState(false)
+    const { user, habits, setHabits, todayHabits, setTodayHabits, setConcluded } = useContext(AppContext)
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-       
+
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         }
+        
+        
+
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
             .then((res) => setHabits(res.data))
             .catch((err) => console.log(err.response.data))
 
-    }, [])
+    }, [setConcluded])
 
     const DAYS = [
         { name: 's', id: 1 },
@@ -54,7 +58,8 @@ export default function HabitsPage() {
 
     function registerNewHabit(e) {
         e.preventDefault()
-        setIsAddingHabit(false)
+        setLoading(true)
+
         const body = {
             name: habitName,
             days: habitsDays
@@ -67,7 +72,8 @@ export default function HabitsPage() {
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config)
             .then((res) => {
                 setHabits([...habits, res.data])
-                console.log(habits)
+                setIsAddingHabit(false)
+
             })
             .catch((err) => console.log(err.response.data))
 
@@ -81,16 +87,16 @@ export default function HabitsPage() {
                 Authorization: `Bearer ${user.token}`
             }
         }
-        if(window.confirm("Deseja apagar o hábito?")) {
+        if (window.confirm("Deseja apagar o hábito?")) {
             axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`, config)
-            .then(() => {
-             setHabits(habits.filter((h) => h.id !== habit.id))
-            })
+                .then(() => {
+                    setHabits(habits.filter((h) => h.id !== habit.id))
+                })
         } else {
             return
         }
-        
-      
+
+
     }
 
 
@@ -116,7 +122,21 @@ export default function HabitsPage() {
                             </Days>
                             <SendInfos>
                                 <p>Cancelar</p>
-                                <button type="submit">Salvar</button>
+                                {!loading ? <button type="submit">Salvar</button> :
+                                    <Loading>
+                                        <ThreeDots
+                                            color="#FFFFFF"
+                                            height="60"
+                                            width="60"
+                                            ariaLabel="three-dots-loading"
+                                            wrapperStyle={{}}
+                                            wrapperClassName=""
+                                            visible={true}
+                                        />
+                                    </Loading>
+
+                                }
+
                             </SendInfos>
                         </div>
                     </form>
@@ -125,7 +145,7 @@ export default function HabitsPage() {
                 {habits.map((h) =>
                     <RegisteredHabits>
                         <h1>{h.name}</h1>
-                        <img onClick={()=>deletHabit(h)} src={trashCan}/>
+                        <img onClick={() => deletHabit(h)} src={trashCan} />
                         <Days>
                             {DAYS.map((d, i) =>
                                 <ChoosedDays color={(h.days).includes(d.id)}>{d.name.toUpperCase()}</ChoosedDays>
@@ -143,9 +163,9 @@ export default function HabitsPage() {
                             Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
                         </p>
                     </NoHabitsText>
-                 }
+                }
 
-                 <Menu/>
+                <Menu />
             </HabitsPageStyle>
         </>
     )
@@ -283,7 +303,7 @@ const SendInfos = styled.div`
             margin-right: 23px;
             cursor: pointer;
         }
-        button:nth-child(2) {
+        button{
             width: 84px;
             height: 35px;
             background: #52B6FF;
@@ -315,4 +335,20 @@ const RegisteredHabits = styled.div`
             cursor: pointer;
         }
 
+`
+
+
+const Loading = styled.div`
+     width: 84px;
+     height: 35px;
+     background: #52B6FF;
+     border-radius: 5px;
+     font-size: 16px;
+     color: #FFFFFF;
+     border-style: none;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     
+        
 `

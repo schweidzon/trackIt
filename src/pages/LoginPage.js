@@ -4,13 +4,17 @@ import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import logo from "../assets/images/logo.png"
 import AppContext from "../context/AppContext"
+import { ThreeDots } from 'react-loader-spinner'
+
+
 
 export default function LoginPage() {
-    const {user, setUser} = useContext(AppContext)
+    const {  setUser, setTodayHabits, todayHabits,  setConcluded ,user } = useContext(AppContext)
     const navigate = useNavigate()
-    const[email,setEmail] = useState("")
-    const[password,setPassword] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [disabled, setDisabled] = useState(false)
+
 
     function login(e) {
         e.preventDefault()
@@ -21,24 +25,26 @@ export default function LoginPage() {
             password
         }
 
-       
+
 
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
-        .then((res) => {
-            console.log(res.data)
-            setUser({
-                email: res.data.email,
-                id: res.data.id,
-                image: res.data.image,
-                name: res.data.name,
-                password: res.data.password,
-                token: res.data.token
+            .then((res) => {
+                console.log(res.data)
+                setUser({
+                    email: res.data.email,
+                    id: res.data.id,
+                    image: res.data.image,
+                    name: res.data.name,
+                    password: res.data.password,
+                    token: res.data.token
+                })
+                setDisabled(false)
+                navigate("/habitos")
             })
-            setDisabled(false)
-            navigate("/habitos")
-            
-        })
-        .catch((err) => console.log(err.response.data))
+            .catch((err) => {
+                alert(err.response.data.message)
+                window.location.reload()
+            })
 
     }
 
@@ -48,13 +54,31 @@ export default function LoginPage() {
                 <img src={logo} alt="trackItLogo" />
                 <div>
                     <form disabled={disabled} onSubmit={login}>
-                        <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" />
-                        <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="senha" />
-                        <button type="submit">Entrar</button>
+                        <input disabled={disabled} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" />
+                        <input disabled={disabled} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="senha" />
+                        {!disabled ? <button disabled={disabled} type="submit">Entrar</button> :
+                            <Loading disabled={true}>
+                                <ThreeDots
+                                    color="#FFFFFF"
+                                    height="60"
+                                    width="60"
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClassName=""
+                                    visible={true}
+                                />
+                            </Loading>
+
+
+                        }
+
+
+
+
                     </form>
                 </div>
                 <Link to={"/cadastro"}>
-                <p>Não tem conta? Cadastre-se</p>
+                    <p>Não tem conta? Cadastre-se</p>
                 </Link>
 
             </Login>
@@ -90,6 +114,9 @@ const LoginContainer = styled.div`
                     font-size: 20px;
                     color: #DBDBDB;
                 }
+                &:disabled {
+                    background-color: #CFCFCF;;
+                }
             }
         }
         button {
@@ -103,6 +130,7 @@ const LoginContainer = styled.div`
             font-style: normal;
             font-weight: 400;
             font-size: 20.976px;
+            margin-bottom: 20px;
             color: #FFFFFF;
              &:active {
                 box-shadow: rgba(50, 50, 93, 0.25) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.3) 0px 10px 30px -18px inset;
@@ -129,3 +157,21 @@ const Login = styled.div`
 `
 
 
+const Loading = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 303px;
+    height: 45px;
+    background: #52B6FF;
+    border-radius: 5px;
+    border-style: none;
+    cursor: pointer;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20.976px;    
+    color: #FFFFFF;
+     
+        
+`

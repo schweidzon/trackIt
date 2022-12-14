@@ -5,13 +5,20 @@ import right from "../assets/images/correctSimb.png"
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
 import axios from "axios";
+import dayjs from "dayjs";
+
+
 
 export default function TodayPage() {
-    const { user } = useContext(AppContext)
-    const [todayHabits, setTodayHabits] = useState([])
+
+    const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
+    const day = (dayjs().format("DD/M"))
+
+    const { user, setConcluded, todayHabits, setTodayHabits } = useContext(AppContext)
+    //const [todayHabits, setTodayHabits] = useState([])
     const [reload, setReload] = useState([])
-    const [todayProgress, setTodayProgress] = useState([])
-    let counter = 1
+
+
     useEffect(() => {
 
         const config = {
@@ -24,47 +31,49 @@ export default function TodayPage() {
             .then(res => {
                 const data = res.data
                 setTodayHabits(data)
-               
-               
+
+
             })
 
         // console.log(counter)
         // console.log(todayHabits.length)
 
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
 
     function render() {
-     
-       if(todayHabits.find((h) => h.done === true))  {
+
+        if (todayHabits.find((h) => h.done === true)) {
             let count = 0
-            todayHabits.map((h) => {
-               if(h.done === true ) {
-                   console.log('true')
-                   count = count + 1
-               }
-             
+            todayHabits.forEach((h) => {
+                if (h.done === true) {
+
+                    count = count + 1
+                }
+
             })
-            return `${((count/todayHabits.length)*100)}% dos hábitos concluídos`
+            setConcluded(((count / todayHabits.length) * 100).toFixed(2))
+            return `${((count / todayHabits.length) * 100).toFixed(2)}% dos hábitos concluídos`
 
         } else {
-            return 'test'
+            return 'Nenhum hábito concluído ainda'
         }
-    
-       
-     
-  
-    
-    }
-   
-    console.log(todayProgress)
 
-    
+
+
+
+
+    }
+
+
+
+
 
 
 
     function finishHabit(habit) {
-        console.log(todayProgress)
+
+
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
@@ -78,7 +87,7 @@ export default function TodayPage() {
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, body, config)
                 .then(() => {
                     setReload([])
-                   
+
                 })
             return
         }
@@ -93,38 +102,59 @@ export default function TodayPage() {
 
 
     }
-
+    const percentage = 66;
 
     return (
         <>
             <NavBar />
-            <HabitsPageStyle>
-
-                <div>
-                    <h1></h1>
+            <HabitsPageStyle >
+                <Day color={render().includes('%')}>
+                    <h1>{`${weekday.charAt(0).toUpperCase() + weekday.slice(1)}, ${day}`}</h1>
                     <p>{render()}</p>
-                </div>
+                </Day>
                 <>
                     {todayHabits.map((h) =>
-                        <RegisteredHabits>
+                        <RegisteredHabits color={h.highestSequence === h.currentSequence} >
                             <div>
                                 <h1>{h.name}</h1>
-                                <p>Sequência atual: {h.currentSequence}</p>
-                                <p>Record: {h.highestSequence}</p>
+                                <p>Sequência atual: <span>{h.currentSequence}</span></p>
+                                <p>Record: <span>{h.highestSequence}</span> </p>
                             </div>
                             <DoneButton onClick={() => finishHabit(h)} done={h.done}></DoneButton>
                         </RegisteredHabits>
 
 
                     )}
-
-
                 </>
+
             </HabitsPageStyle>
+           
             <Menu />
+
         </>
     )
 }
+
+
+
+
+
+const Day = styled.div`
+    h1 {
+        font-size: 23px;
+        color: #126BA5;
+        margin-bottom: 5px;
+        margin-top: 28px;
+        width: 303px;
+      
+    }
+    p {
+        font-size: 18px;        
+        margin-bottom: 28px;
+        color: ${props => props.color ? "#8FC549" : '#BABABA'};
+
+    }
+`
 
 const HabitsPageStyle = styled.div`
     padding-top: 15px;
@@ -159,6 +189,10 @@ const RegisteredHabits = styled.div`
         p {
           font-size  :13px ;
           color: #666666;
+          
+        }
+        span {
+            color: ${props => props.color ? '#8FC549' : "#666666"};
         }
 `
 
