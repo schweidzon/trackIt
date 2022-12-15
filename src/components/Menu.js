@@ -31,7 +31,9 @@ export default function  Menu() {
                 />
             </ToDayButton>
             </Link>
+            <Link to="/historico">
             <p>Histórico</p>
+            </Link>
         </MenuStyle>
     )
 }

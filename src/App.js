@@ -8,6 +8,7 @@ import GlobalStyle from "./style/globalStyle";
 import AppProvider from "./context/Provider";
 import Menu from "./components/Menu";
 import TodayPage from "./pages/TodayPage";
+import HistoricPage from "./pages/HistoricPage";
 
 function App() {
 
@@ -23,6 +24,8 @@ function App() {
             <Route path="/cadastro" element={<RegisterPage />} />
             <Route path="/habitos" element={<HabitsPage  />} />
             <Route path="/hoje" element={<TodayPage/>}/>
+            <Route path="/historico" element={<HistoricPage/>}/>
+
           </Routes>
           
         </AppProvider>
