@@ -10,7 +10,7 @@ import { ThreeDots } from 'react-loader-spinner'
 
 
 export default function LoginPage() {
-    const {  setUser, setTodayHabits,  setConcluded  } = useContext(AppContext)
+    const { setUser, setTodayHabits, setConcluded } = useContext(AppContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -19,24 +19,24 @@ export default function LoginPage() {
 
     useEffect(() => {
         setTimeout(() => {
-            if(localStorage.getItem("user")) {
+            if (localStorage.getItem("user")) {
                 const user = localStorage.getItem("user")
                 const user2 = JSON.parse(user)
                 setUser(user2)
                 navigate("/hoje")
                 todayHabits(user2.token)
-             }
-        },500)
-            
+            }
+        }, 500)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps     
     }, [])
-   
+
 
 
     function login(e) {
         e.preventDefault()
         setDisabled(true)
-        
+
 
         const body = {
             email,
@@ -57,7 +57,7 @@ export default function LoginPage() {
                 setDisabled(false)
                 navigate("/habitos")
                 todayHabits(res.data.token)
-                
+
             })
             .catch((err) => {
                 alert(err.response.data.message)
@@ -81,20 +81,20 @@ export default function LoginPage() {
                     let count = 0
                     res.data.forEach((h) => {
                         if (h.done === true) {
-        
+
                             count = count + 1
                         }
-        
+
                     })
                     setConcluded(((count / res.data.length) * 100).toFixed(2))
-                   
+
                 }
                 setTodayHabits(data)
             })
     }
 
-    
-  
+
+
     return (
         <LoginContainer>
             <Login>
@@ -128,10 +128,10 @@ export default function LoginPage() {
                     <p data-test="signup-link" >Não tem conta? Cadastre-se</p>
                 </Link>
                 <div>
-     
-      
-    
-    </div>
+
+
+
+                </div>
 
             </Login>
         </LoginContainer>

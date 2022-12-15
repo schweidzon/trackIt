@@ -5,40 +5,40 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useContext } from "react";
 import AppContext from "../context/AppContext";
 
-export default function  Menu() {
-    const {concluded} = useContext(AppContext)
+export default function Menu() {
+    const { concluded } = useContext(AppContext)
 
     return (
         <MenuStyle>
             <Link data-test="habit-link" to={"/habitos"}>
-            <p>Hábitos</p>
+                <p>Hábitos</p>
             </Link>
             <Link to="/hoje" data-test="today">
-            <ToDayButton >
-                <CircularProgressbar                    
-                    value={concluded}                    
-                    text={"Hoje"}
-                    background
-                    backgroundPadding={6}
-                    styles={buildStyles({
-                        backgroundColor: "#3e98c7",
-                        textColor: "#fff",
-                        pathColor: "#fff",
-                        trailColor: "transparent",
-                        
-                        
-                    })}
-                />
-            </ToDayButton>
+                <ToDayButton >
+                    <CircularProgressbar
+                        value={concluded}
+                        text={"Hoje"}
+                        background
+                        backgroundPadding={6}
+                        styles={buildStyles({
+                            backgroundColor: "#3e98c7",
+                            textColor: "#fff",
+                            pathColor: "#fff",
+                            trailColor: "transparent",
+
+
+                        })}
+                    />
+                </ToDayButton>
             </Link>
             <Link data-test="history-link" to="/historico">
-            <p>Histórico</p>
+                <p>Histórico</p>
             </Link>
         </MenuStyle>
     )
 }
 
-const MenuStyle = styled.div `
+const MenuStyle = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -59,7 +59,7 @@ const MenuStyle = styled.div `
 `
 
 
-const ToDayButton = styled.div `
+const ToDayButton = styled.div`
     width: 91px;
     height: 91px;
     background: #52B6FF;

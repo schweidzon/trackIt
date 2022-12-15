@@ -10,21 +10,21 @@ import dayjs from "dayjs";
 
 
 export default function TodayPage() {
-  
-    
+
+
 
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
-   
-    
+
+
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
 
     const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)
     //const [todayHabits, setTodayHabits] = useState([])
     const [reload, setReload] = useState([])
-    
-   
-   
+
+
+
 
     useEffect(() => {
 
@@ -38,18 +38,18 @@ export default function TodayPage() {
             .then(res => {
                 const data = res.data
                 setTodayHabits(data)
-                
-             
-               
-                
-                
+
+
+
+
+
             })
 
         // console.log(counter)
         // console.log(todayHabits.length)
 
-       
-       
+
+
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
@@ -73,10 +73,10 @@ export default function TodayPage() {
 
     }
 
-  
+
     function finishHabit(habit) {
-       
-     
+
+
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
@@ -87,39 +87,39 @@ export default function TodayPage() {
 
 
         if (habit.done === true) {
-           
+
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, body, config)
                 .then(() => {
                     setReload([])
-                   
-                    
+
+
 
                 })
             return
         } else {
-           
+
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, body, config)
-            .then(() => {
-                setReload([])
-             
-                
-            })
-            .catch(err => console.log(err.response.data))
+                .then(() => {
+                    setReload([])
+
+
+                })
+                .catch(err => console.log(err.response.data))
 
         }
 
 
-        
+
 
 
     }
 
-        
-
-    
 
 
-   
+
+
+
+
 
     return (
         <>
@@ -130,14 +130,14 @@ export default function TodayPage() {
                     <p data-test="today-counter">{render()}</p>
                 </Day>
                 <>
-                    {todayHabits.map((h, i) =>
+                    {todayHabits.map((h) =>
                         <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence} >
                             <div>
                                 <h1 data-test="today-habit-name">{h.name}</h1>
                                 <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} dias</span></p>
                                 <p data-test="today-habit-record">Record: <span>{h.highestSequence} dias</span> </p>
                             </div>
-                            <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)}  done={h.done}></DoneButton>
+                            <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)} done={h.done}></DoneButton>
                         </RegisteredHabits>
 
 
@@ -145,7 +145,7 @@ export default function TodayPage() {
                 </>
 
             </HabitsPageStyle>
-           
+
             <Menu data-test="menu" />
 
         </>

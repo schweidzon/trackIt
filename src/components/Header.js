@@ -4,13 +4,13 @@ import styled from "styled-components"
 import AppContext from "../context/AppContext"
 
 export default function Header() {
-    const { user, setUser } = useContext(AppContext)
+    const { user } = useContext(AppContext)
     return (
         <HeaderStyled>
             <Link to="/">
                 <h1>TrackIt</h1>
             </Link>
-            <img src={user.image} />
+            <img src={user.image} alt="userImage" />
         </HeaderStyled>
     )
 }
