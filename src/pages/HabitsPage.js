@@ -66,7 +66,12 @@ export default function HabitsPage() {
 
     function registerNewHabit(e) {
         e.preventDefault()
+        if(habitsDays.length < 1) {
+            alert("Escolhe pelo menos um dia da semana")
+            return
+        }
         setLoading(true)
+       
 
         const body = {
             name: habitName,
@@ -86,7 +91,14 @@ export default function HabitsPage() {
                 setHabitsDays([])
 
             })
-            .catch((err) => console.log(err.response.data))
+            .catch((err) => {
+                alert(err.response.data.message)
+                setIsAddingHabit(false)
+                setLoading(false)
+                setHabitName("")
+                setHabitsDays([])
+
+            })
 
 
     }
@@ -111,7 +123,6 @@ export default function HabitsPage() {
 
     function cancel() {
         setIsAddingHabit(false)
-
     }
 
 
@@ -132,13 +143,13 @@ export default function HabitsPage() {
                             <input data-test="habit-name-input" disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
                             <Days >
                                 {DAYS.map((day) =>
-                                    <DaysButtons data-test="habit-day" key={day.id} day={habitsDays.includes(day.id)} onClick={() => selectDays(day)}>{day.name.toUpperCase()}</DaysButtons>
+                                    <DaysButtons disabled={loading} data-test="habit-day" key={day.id} day={habitsDays.includes(day.id)} onClick={() => selectDays(day)}>{day.name.toUpperCase()}</DaysButtons>
                                 )}
                             </Days>
                             <SendInfos>
-                                <p data-test="habit-create-cancel-btn" onClick={cancel}>Cancelar</p>
+                                <button type="button" disabled={loading} data-test="habit-create-cancel-btn" onClick={cancel}>Cancelar</button>
                                 {!loading ? <button data-test="habit-create-save-btn" disabled={loading} type="submit">Salvar</button> :
-                                    <Loading disabled={false}>
+                                    <Loading disabled={true}>
                                         <ThreeDots
                                             color="#FFFFFF"
                                             height="60"
@@ -309,10 +320,9 @@ const SendInfos = styled.div`
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
-  
+    align-items: center;  
     margin-top: 15px;
-        p {
+        button:first-of-type {
             width: 69px;
             height: 20px;
             font-size: 16px;
@@ -368,9 +378,5 @@ const Loading = styled.button`
      display: flex;
      justify-content: center;
      align-items: center;
-     &:disabled {
-                background-color: #CFCFCF;
-            }
-     
         
 `

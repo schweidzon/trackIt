@@ -34,11 +34,6 @@ export default function TodayPage() {
             .then(res => {
                 const data = res.data
                 setTodayHabits(data)
-
-
-
-
-
             })
 
         // console.log(counter)

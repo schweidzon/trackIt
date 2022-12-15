@@ -17,19 +17,19 @@ export default function LoginPage() {
     const [disabled, setDisabled] = useState(false)
 
 
-    useEffect(() => {
-        setTimeout(() => {
-            if (localStorage.getItem("user")) {
-                const user = localStorage.getItem("user")
-                const user2 = JSON.parse(user)
-                setUser(user2)
-                navigate("/hoje")
-                todayHabits(user2.token)
-            }
-        }, 500)
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         if (localStorage.getItem("user")) {
+    //             const user = localStorage.getItem("user")
+    //             const user2 = JSON.parse(user)
+    //             setUser(user2)
+    //             navigate("/hoje")
+    //             todayHabits(user2.token)
+    //         }
+    //     }, 500)
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps     
-    }, [])
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps     
+    // }, [])
 
 
 
