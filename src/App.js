@@ -10,6 +10,8 @@ import Menu from "./components/Menu";
 import TodayPage from "./pages/TodayPage";
 import HistoricPage from "./pages/HistoricPage";
 
+
+
 function App() {
 
 
@@ -25,9 +27,11 @@ function App() {
             <Route path="/habitos" element={<HabitsPage  />} />
             <Route path="/hoje" element={<TodayPage/>}/>
             <Route path="/historico" element={<HistoricPage/>}/>
+          
 
           </Routes>
           
+      
         </AppProvider>
       </BrowserRouter>
     </>

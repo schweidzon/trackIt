@@ -10,10 +10,10 @@ export default function  Menu() {
 
     return (
         <MenuStyle>
-            <Link to={"/habitos"}>
+            <Link data-test="habit-link" to={"/habitos"}>
             <p>Hábitos</p>
             </Link>
-            <Link to="/hoje">
+            <Link to="/hoje" data-test="today">
             <ToDayButton >
                 <CircularProgressbar                    
                     value={concluded}                    
@@ -31,7 +31,7 @@ export default function  Menu() {
                 />
             </ToDayButton>
             </Link>
-            <Link to="/historico">
+            <Link data-test="history-link" to="/historico">
             <p>Histórico</p>
             </Link>
         </MenuStyle>

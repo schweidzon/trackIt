@@ -1,18 +1,21 @@
 import axios from "axios"
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { ThreeDots } from "react-loader-spinner"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import logo from "../assets/images/logo.png"
 
 export default function RegisterPage() {
     const navigate = useNavigate()
-    const [name, setName ] = useState("")
-    const [password, setPassword ] = useState("")
-    const [email, setEmail ] = useState("")
-    const [image, setImage ] = useState("")
+    const [name, setName] = useState("")
+    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("")
+    const [image, setImage] = useState("")
+    const [disabled, setDisabled] = useState(false)
 
     function register(e) {
         e.preventDefault()
+        setDisabled(true)
 
         const body = {
             email,
@@ -21,12 +24,18 @@ export default function RegisterPage() {
             password
         }
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body)
-        .then((res) =>{
-            console.log(res.data)
-            navigate("/")
-            
-        } )
-        .catch((err) => alert(err.response.data.message))
+            .then((res) => {
+                console.log(res.data)
+                alert("Usuário cadastrado com sucesso!")
+                navigate("/")
+                setDisabled(false)
+
+            })
+            .catch((err) => {
+                alert(err.response.data.message)
+                window.location.reload()
+            })
+
     }
 
     return (
@@ -35,15 +44,31 @@ export default function RegisterPage() {
                 <img src={logo} alt="trackItLogo" />
                 <div>
                     <form onSubmit={register}>
-                        <input type="email" onChange={(e) => setEmail(e.target.value)}placeholder="email" />
-                        <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="senha" />
-                        <input type="name" onChange={(e) => setName(e.target.value)} placeholder="nome" />
-                        <input type="url" onChange={(e) => setImage(e.target.value)} placeholder="foto" />
-                        <button type="submit">Cadastrar</button>
+                        <input data-test="email-input" disabled={disabled} type="email" onChange={(e) => setEmail(e.target.value)} placeholder="email" />
+                        <input data-test="password-input" disabled={disabled} type="password" onChange={(e) => setPassword(e.target.value)} placeholder="senha" />
+                        <input data-test="user-name-input" disabled={disabled} type="name" onChange={(e) => setName(e.target.value)} placeholder="nome" />
+                        <input data-test="user-image-input" disabled={disabled} type="url" onChange={(e) => setImage(e.target.value)} placeholder="foto" />
+                        {!disabled ? <button data-test="signup-btn" disabled={disabled} type="submit">Cadastrar</button> :
+                            <Loading disabled={true}>
+                                <ThreeDots
+                                    color="#FFFFFF"
+                                    height="60"
+                                    width="60"
+                                    ariaLabel="three-dots-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClassName=""
+                                    visible={true}
+                                />
+                            </Loading>
+
+
+                        }
                     </form>
                 </div>
+                <Link data-test="login-link" to="/">
+                    <p>Já tem uma conta? Faça login!</p>
+                </Link>
 
-                <p>Já tem uma conta? Faça login!</p>
             </Register>
         </RegisterContainer>
 
@@ -77,6 +102,9 @@ const RegisterContainer = styled.div`
                     font-weight: 400;
                     font-size: 20px;
                     color: #DBDBDB;
+                }
+                &:disabled {
+                    background-color: #CFCFCF;;
                 }
             }
         }
@@ -114,6 +142,25 @@ const Register = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+`
+
+const Loading = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 303px;
+    height: 45px;
+    background: #52B6FF;
+    border-radius: 5px;
+    border-style: none;
+    cursor: pointer;
+    font-family: 'Lexend Deca';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20.976px;    
+    color: #FFFFFF;
+     
+        
 `
 
 

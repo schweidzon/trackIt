@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useContext, useEffect, useState } from "react"
 import styled from "styled-components"
-import NavBar from "../components/Header"
+import Header from "../components/Header"
 import AppContext from "../context/AppContext"
 import trashCan from "../assets/images/trashCan.png"
 import Menu from "../components/Menu"
@@ -14,20 +14,21 @@ export default function HabitsPage() {
     useEffect(() => {
         console.log(todayHabits)
 
-       
+
 
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         }
-        
-        
+
+
 
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
             .then((res) => setHabits(res.data))
             .catch((err) => console.log(err.response.data))
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setConcluded])
 
     const DAYS = [
@@ -51,6 +52,10 @@ export default function HabitsPage() {
     }
 
     function selectDays(day) {
+        if (habitsDays.includes(day.id)) {
+            setHabitsDays(habitsDays.filter((h) => h !== day.id))
+            return
+        }
         const days = [...habitsDays, day.id]
         setHabitsDays(days)
         console.log(days)
@@ -83,7 +88,7 @@ export default function HabitsPage() {
             })
             .catch((err) => console.log(err.response.data))
 
-      
+
     }
 
     function deletHabit(habit) {
@@ -104,31 +109,36 @@ export default function HabitsPage() {
 
     }
 
+    function cancel() {
+        setIsAddingHabit(false)
+
+    }
+
 
 
 
 
     return (
         <>
-            <NavBar />
+            <Header data-test="header" />
             <HabitsPageStyle>
                 <AddHabitStyle>
                     <h1>Meus hábitos</h1>
-                    <button onClick={addHabit}>+</button>
+                    <button data-test="habit-create-btn" onClick={addHabit}>+</button>
                 </AddHabitStyle>
-                <HabitsInfo status={isAddingHabit} >
+                <HabitsInfo data-test="habit-create-container" status={isAddingHabit} >
                     <form onSubmit={registerNewHabit}>
                         <div>
-                            <input disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
+                            <input data-test="habit-name-input" disabled={loading} value={habitName} onChange={(e) => setHabitName(e.target.value)} type="text" placeholder="nome do hábito" />
                             <Days >
                                 {DAYS.map((day) =>
-                                    <DaysButtons color={habitsDays.includes(day.id)} onClick={() => selectDays(day)} key={day.id}>{day.name.toUpperCase()}</DaysButtons>
+                                    <DaysButtons data-test="habit-day" key={day.id} day={habitsDays.includes(day.id)} onClick={() => selectDays(day)}>{day.name.toUpperCase()}</DaysButtons>
                                 )}
                             </Days>
                             <SendInfos>
-                                <p>Cancelar</p>
-                                {!loading ? <button disabled={loading} type="submit">Salvar</button> :
-                                    <Loading disabled={loading}>
+                                <p data-test="habit-create-cancel-btn" onClick={cancel}>Cancelar</p>
+                                {!loading ? <button data-test="habit-create-save-btn" disabled={loading} type="submit">Salvar</button> :
+                                    <Loading disabled={false}>
                                         <ThreeDots
                                             color="#FFFFFF"
                                             height="60"
@@ -139,21 +149,19 @@ export default function HabitsPage() {
                                             visible={true}
                                         />
                                     </Loading>
-
                                 }
-
                             </SendInfos>
                         </div>
                     </form>
 
                 </HabitsInfo>
                 {habits.map((h) =>
-                    <RegisteredHabits>
-                        <h1>{h.name}</h1>
-                        <img onClick={() => deletHabit(h)} src={trashCan} />
+                    <RegisteredHabits data-test="habit-container" key={h.id}>
+                        <h1 data-test="habit-name">{h.name}</h1>
+                        <img data-test="habit-delete-btn" onClick={() => deletHabit(h)} src={trashCan} alt="deletHabit" />
                         <Days>
-                            {DAYS.map((d, i) =>
-                                <ChoosedDays color={(h.days).includes(d.id)}>{d.name.toUpperCase()}</ChoosedDays>
+                            {DAYS.map((d) =>
+                                <ChoosedDays data-test="habit-day" key={d.id} day={(h.days).includes(d.id)}>{d.name.toUpperCase()}</ChoosedDays>
                             )}
 
                         </Days>
@@ -170,7 +178,7 @@ export default function HabitsPage() {
                     </NoHabitsText>
                 }
 
-                <Menu />
+                <Menu data-test="menu" />
             </HabitsPageStyle>
         </>
     )
@@ -268,7 +276,7 @@ const Days = styled.div`
 const DaysButtons = styled.div`
      width: 30px;
     height: 30px;
-    background-color: ${props => props.color ? "#CFCFCF" : "#FFFFFF"};
+    background-color: ${props => props.day ? "#CFCFCF" : "#FFFFFF"};
     border: 1px solid #D5D5D5;
     border-radius: 5px;
     font-size: 20px;
@@ -283,7 +291,7 @@ const DaysButtons = styled.div`
 const ChoosedDays = styled.div`
     width: 30px;
     height: 30px;
-    background-color: ${props => props.color ? "#CFCFCF" : "#FFFFFF"};
+    background-color: ${props => props.day ? "#CFCFCF" : "#FFFFFF"};
     border: 1px solid #D5D5D5;
     border-radius: 5px;
     font-size: 20px;

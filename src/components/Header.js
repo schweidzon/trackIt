@@ -3,19 +3,19 @@ import { Link } from "react-router-dom"
 import styled from "styled-components"
 import AppContext from "../context/AppContext"
 
-export default function NavBar() {
+export default function Header() {
     const { user, setUser } = useContext(AppContext)
     return (
-        <Header>
+        <HeaderStyled>
             <Link to="/">
                 <h1>TrackIt</h1>
             </Link>
             <img src={user.image} />
-        </Header>
+        </HeaderStyled>
     )
 }
 
-const Header = styled.div`
+const HeaderStyled = styled.div`
     width: 100%;
     height: 70px;
     background: #126BA5;

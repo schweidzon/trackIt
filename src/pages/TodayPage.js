@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import NavBar from "../components/Header";
+import Header from "../components/Header";
 import Menu from "../components/Menu";
 import right from "../assets/images/correctSimb.png"
 import { useContext, useEffect, useState } from "react";
@@ -19,9 +19,11 @@ export default function TodayPage() {
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
 
-    const { user, setConcluded, todayHabits, setTodayHabits } = useContext(AppContext)
+    const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)
     //const [todayHabits, setTodayHabits] = useState([])
     const [reload, setReload] = useState([])
+    
+   
    
 
     useEffect(() => {
@@ -36,18 +38,23 @@ export default function TodayPage() {
             .then(res => {
                 const data = res.data
                 setTodayHabits(data)
-
-
+                
+             
+               
+                
+                
             })
 
         // console.log(counter)
         // console.log(todayHabits.length)
 
+       
+       
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
 
     function render() {
-
         if (todayHabits.find((h) => h.done === true)) {
             let count = 0
             todayHabits.forEach((h) => {
@@ -64,21 +71,12 @@ export default function TodayPage() {
             return 'Nenhum hábito concluído ainda'
         }
 
-
-
-
-
     }
 
-
-
-
-
-
-
+  
     function finishHabit(habit) {
-
-
+       
+     
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
@@ -89,43 +87,57 @@ export default function TodayPage() {
 
 
         if (habit.done === true) {
+           
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, body, config)
                 .then(() => {
                     setReload([])
+                   
+                    
 
                 })
             return
-        }
-
-
-        axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, body, config)
+        } else {
+           
+            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, body, config)
             .then(() => {
                 setReload([])
+             
+                
             })
             .catch(err => console.log(err.response.data))
 
+        }
+
+
+        
 
 
     }
-    const percentage = 66;
+
+        
+
+    
+
+
+   
 
     return (
         <>
-            <NavBar />
+            <Header data-test="header" />
             <HabitsPageStyle >
-                <Day color={render().includes('%')}>
-                    <h1>{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
-                    <p>{render()}</p>
+                <Day concluded={concluded > 0}>
+                    <h1 data-test="today">{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
+                    <p data-test="today-counter">{render()}</p>
                 </Day>
                 <>
-                    {todayHabits.map((h) =>
-                        <RegisteredHabits color={h.highestSequence === h.currentSequence} >
+                    {todayHabits.map((h, i) =>
+                        <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence} >
                             <div>
-                                <h1>{h.name}</h1>
-                                <p>Sequência atual: <span>{h.currentSequence}</span></p>
-                                <p>Record: <span>{h.highestSequence}</span> </p>
+                                <h1 data-test="today-habit-name">{h.name}</h1>
+                                <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} dias</span></p>
+                                <p data-test="today-habit-record">Record: <span>{h.highestSequence} dias</span> </p>
                             </div>
-                            <DoneButton onClick={() => finishHabit(h)} done={h.done}></DoneButton>
+                            <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)}  done={h.done}></DoneButton>
                         </RegisteredHabits>
 
 
@@ -134,7 +146,7 @@ export default function TodayPage() {
 
             </HabitsPageStyle>
            
-            <Menu />
+            <Menu data-test="menu" />
 
         </>
     )
@@ -156,7 +168,7 @@ const Day = styled.div`
     p {
         font-size: 18px;        
         margin-bottom: 28px;
-        color: ${props => props.color ? "#8FC549" : '#BABABA'};
+        color: ${props => props.concluded ? "#8FC549" : '#BABABA'};
 
     }
 `
@@ -197,7 +209,7 @@ const RegisteredHabits = styled.div`
           
         }
         span {
-            color: ${props => props.color ? '#8FC549' : "#666666"};
+            color: ${props => props.sequence ? '#8FC549' : "#666666"};
         }
 `
 

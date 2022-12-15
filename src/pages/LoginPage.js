@@ -1,5 +1,5 @@
 import axios from "axios"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import logo from "../assets/images/logo.png"
@@ -8,17 +8,35 @@ import { ThreeDots } from 'react-loader-spinner'
 
 
 
+
 export default function LoginPage() {
-    const {  setUser, setTodayHabits, todayHabits,  setConcluded ,user } = useContext(AppContext)
+    const {  setUser, setTodayHabits,  setConcluded  } = useContext(AppContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [disabled, setDisabled] = useState(false)
 
 
+    useEffect(() => {
+        setTimeout(() => {
+            if(localStorage.getItem("user")) {
+                const user = localStorage.getItem("user")
+                const user2 = JSON.parse(user)
+                setUser(user2)
+                navigate("/hoje")
+                todayHabits(user2.token)
+             }
+        },500)
+            
+        // eslint-disable-next-line react-hooks/exhaustive-deps     
+    }, [])
+   
+
+
     function login(e) {
         e.preventDefault()
         setDisabled(true)
+        
 
         const body = {
             email,
@@ -38,7 +56,8 @@ export default function LoginPage() {
                 })
                 setDisabled(false)
                 navigate("/habitos")
-                test(res.data.token)
+                todayHabits(res.data.token)
+                
             })
             .catch((err) => {
                 alert(err.response.data.message)
@@ -47,7 +66,7 @@ export default function LoginPage() {
 
     }
 
-    function test(token) {
+    function todayHabits(token) {
         console.log(token)
         const config = {
             headers: {
@@ -74,15 +93,17 @@ export default function LoginPage() {
             })
     }
 
+    
+  
     return (
         <LoginContainer>
             <Login>
                 <img src={logo} alt="trackItLogo" />
                 <div>
                     <form disabled={disabled} onSubmit={login}>
-                        <input disabled={disabled} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" />
-                        <input disabled={disabled} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="senha" />
-                        {!disabled ? <button disabled={disabled} type="submit">Entrar</button> :
+                        <input data-test="email-input" disabled={disabled} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" />
+                        <input data-test="password-input" disabled={disabled} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="senha" />
+                        {!disabled ? <button data-test="login-btn" disabled={disabled} type="submit">Entrar</button> :
                             <Loading disabled={true}>
                                 <ThreeDots
                                     color="#FFFFFF"
@@ -103,9 +124,14 @@ export default function LoginPage() {
 
                     </form>
                 </div>
-                <Link to={"/cadastro"}>
-                    <p>Não tem conta? Cadastre-se</p>
+                <Link data-test="signup-link" to={"/cadastro"}>
+                    <p data-test="signup-link" >Não tem conta? Cadastre-se</p>
                 </Link>
+                <div>
+     
+      
+    
+    </div>
 
             </Login>
         </LoginContainer>
