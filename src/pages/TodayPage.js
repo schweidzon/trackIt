@@ -6,22 +6,18 @@ import { useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useLocation } from "react-router-dom";
 
 
 
 export default function TodayPage() {
-
-
-
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
-
-
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
-
-    const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)
-    //const [todayHabits, setTodayHabits] = useState([])
+    const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)    
     const [reload, setReload] = useState([])
+    const location = useLocation()
+   
 
 
 
@@ -127,7 +123,7 @@ export default function TodayPage() {
             <HabitsPageStyle >
                 <Day concluded={concluded > 0}>
                     <h1 data-test="today">{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
-                    <p data-test="today-counter">{render()}</p>
+                    <p data-test="today-counter">{location.pathname==="/hoje" && render()}</p>
                 </Day>
                 <>
                     {todayHabits.map((h) =>
