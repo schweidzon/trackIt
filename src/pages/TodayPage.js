@@ -7,6 +7,7 @@ import AppContext from "../context/AppContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
+import { ThreeDots } from "react-loader-spinner";
 
 
 
@@ -14,7 +15,7 @@ export default function TodayPage() {
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
-    const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)
+    const { user, setConcluded, todayHabits, setTodayHabits } = useContext(AppContext)
     const [reload, setReload] = useState([])
     const location = useLocation()
 
@@ -35,6 +36,20 @@ export default function TodayPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
 
+    if(todayHabits.length < 1) {
+        return (
+            <ThreeDots
+            color="#FFFFFF"
+            height="60"
+            width="60"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+        />
+        )
+    }
+
     function render() {
         if (todayHabits.find((h) => h.done === true)) {
             let count = 0
@@ -49,6 +64,7 @@ export default function TodayPage() {
             return `${((count / todayHabits.length) * 100).toFixed(2)}% dos hábitos concluídos`
 
         } else {
+
             return 'Nenhum hábito concluído ainda'
         }
 
@@ -93,17 +109,18 @@ export default function TodayPage() {
         <>
             <Header data-test="header" />
             <HabitsPageStyle >
-                <Day concluded={concluded > 0}>
+                <Day concluded={(todayHabits.find((h) => h.done === true))}>
+                    {console.log(todayHabits)}
                     <h1 data-test="today">{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
                     <p data-test="today-counter">{location.pathname === "/hoje" && render()}</p>
                 </Day>
 
                 {todayHabits.map((h) =>
-                    <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence} >
+                    <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence && h.highestSequence > 0} >
                         <div>
                             <h1 data-test="today-habit-name">{h.name}</h1>
-                            <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} dias</span></p>
-                            <p data-test="today-habit-record">Record: <span>{h.highestSequence} dias</span> </p>
+                            <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</span></p>
+                            <p data-test="today-habit-record">Record: <span>{h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
                         </div>
                         <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)} done={h.done}></DoneButton>
                     </RegisteredHabits>

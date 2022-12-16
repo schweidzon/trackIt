@@ -8,8 +8,11 @@ import Menu from "../components/Menu"
 import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
-    const { user, habits, setHabits, todayHabits, setConcluded } = useContext(AppContext)
+    const { user, habits, setHabits, setConcluded } = useContext(AppContext)
     const [loading, setLoading] = useState(false)
+    const [isAddingHabit, setIsAddingHabit] = useState(false)
+    const [habitsDays, setHabitsDays] = useState([])
+    const [habitName, setHabitName] = useState("")
 
     useEffect(() => {
 
@@ -26,6 +29,20 @@ export default function HabitsPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setConcluded])
 
+    if(habits.length < 1) {
+        return (
+            <ThreeDots
+            color="#FFFFFF"
+            height="60"
+            width="60"
+            ariaLabel="three-dots-loading"
+            wrapperStyle={{}}
+            wrapperClassName=""
+            visible={true}
+        />
+        )
+    }
+
     const DAYS = [
         { name: 's', id: 1 },
         { name: 't', id: 2 },
@@ -36,9 +53,6 @@ export default function HabitsPage() {
         { name: 'd', id: 7 }
     ]
 
-    const [isAddingHabit, setIsAddingHabit] = useState(false)
-    const [habitsDays, setHabitsDays] = useState([])
-    const [habitName, setHabitName] = useState("")
 
     function addHabit() {
         setIsAddingHabit(true)
