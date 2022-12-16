@@ -7,7 +7,7 @@ import AppContext from "../context/AppContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
-import { ThreeDots } from "react-loader-spinner";
+
 
 
 
@@ -36,19 +36,7 @@ export default function TodayPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
 
-    if(todayHabits.length < 1) {
-        return (
-            <ThreeDots
-            color="#FFFFFF"
-            height="60"
-            width="60"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            wrapperClassName=""
-            visible={true}
-        />
-        )
-    }
+   
 
     function render() {
         if (todayHabits.find((h) => h.done === true)) {
@@ -146,7 +134,7 @@ const Day = styled.div`
     }
     p {
         font-size: 18px;        
-        margin-bottom: 28px;
+        margin-bottom: 8px;
         color: ${props => props.concluded ? "#8FC549" : '#BABABA'};
 
     }
@@ -162,6 +150,7 @@ const HabitsPageStyle = styled.div`
     overflow-y: auto;
     padding-bottom: 130px;
     min-height: calc(100vh - 70px);
+    margin-top: 60px;
   
 `
 

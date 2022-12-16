@@ -24,6 +24,9 @@ const HeaderStyled = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 15px;
+    position:fixed;
+    top: 0;
+    
         h1 {
             font-family: 'Playball';
             font-size: 39px;

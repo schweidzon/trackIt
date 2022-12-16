@@ -29,20 +29,7 @@ export default function HabitsPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setConcluded])
 
-    if(habits.length < 1) {
-        return (
-            <ThreeDots
-            color="#FFFFFF"
-            height="60"
-            width="60"
-            ariaLabel="three-dots-loading"
-            wrapperStyle={{}}
-            wrapperClassName=""
-            visible={true}
-        />
-        )
-    }
-
+    
     const DAYS = [
         { name: 's', id: 1 },
         { name: 't', id: 2 },
@@ -205,7 +192,7 @@ const NoHabitsText = styled.div`
 `
 
 const HabitsPageStyle = styled.div`
-    padding-top: 15px;
+    padding-top: 15px;   
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -219,7 +206,7 @@ const HabitsPageStyle = styled.div`
 
 const AddHabitStyle = styled.div`
     padding:0 15px 0 15px;
-    margin-top: 15px;
+    margin-top: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;   
