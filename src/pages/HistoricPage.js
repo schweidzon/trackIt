@@ -13,12 +13,6 @@ import AppContext from "../context/AppContext"
 export default function HistoricPage() {
     const { user } = useContext(AppContext)
 
-
-
-
-
-
-
     useEffect(() => {
         const config = {
             headers: {
@@ -31,9 +25,6 @@ export default function HistoricPage() {
             .catch((err) => console.log(err.responde.data))
         // eslint-disable-next-line react-hooks/exhaustive-deps  
     }, [])
-
-
-
 
     return (
         <>

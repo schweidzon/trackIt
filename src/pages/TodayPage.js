@@ -14,13 +14,9 @@ export default function TodayPage() {
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
-    const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)    
+    const { user, setConcluded, concluded, todayHabits, setTodayHabits } = useContext(AppContext)
     const [reload, setReload] = useState([])
     const location = useLocation()
-   
-
-
-
 
     useEffect(() => {
 
@@ -35,12 +31,6 @@ export default function TodayPage() {
                 const data = res.data
                 setTodayHabits(data)
             })
-
-        // console.log(counter)
-        // console.log(todayHabits.length)
-
-
-
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
@@ -75,16 +65,11 @@ export default function TodayPage() {
         }
         const body = {}
 
-
-
         if (habit.done === true) {
 
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, body, config)
                 .then(() => {
                     setReload([])
-
-
-
                 })
             return
         } else {
@@ -92,17 +77,9 @@ export default function TodayPage() {
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, body, config)
                 .then(() => {
                     setReload([])
-
-
                 })
                 .catch(err => console.log(err.response.data))
-
         }
-
-
-
-
-
     }
 
 
@@ -118,27 +95,21 @@ export default function TodayPage() {
             <HabitsPageStyle >
                 <Day concluded={concluded > 0}>
                     <h1 data-test="today">{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
-                    <p data-test="today-counter">{location.pathname==="/hoje" && render()}</p>
+                    <p data-test="today-counter">{location.pathname === "/hoje" && render()}</p>
                 </Day>
-                <>
-                    {todayHabits.map((h) =>
-                        <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence} >
-                            <div>
-                                <h1 data-test="today-habit-name">{h.name}</h1>
-                                <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} dias</span></p>
-                                <p data-test="today-habit-record">Record: <span>{h.highestSequence} dias</span> </p>
-                            </div>
-                            <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)} done={h.done}></DoneButton>
-                        </RegisteredHabits>
 
-
-                    )}
-                </>
-
+                {todayHabits.map((h) =>
+                    <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence} >
+                        <div>
+                            <h1 data-test="today-habit-name">{h.name}</h1>
+                            <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} dias</span></p>
+                            <p data-test="today-habit-record">Record: <span>{h.highestSequence} dias</span> </p>
+                        </div>
+                        <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)} done={h.done}></DoneButton>
+                    </RegisteredHabits>
+                )}
             </HabitsPageStyle>
-
             <Menu data-test="menu" />
-
         </>
     )
 }

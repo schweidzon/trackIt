@@ -12,17 +12,12 @@ export default function HabitsPage() {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        console.log(todayHabits)
-
-
 
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         }
-
-
 
         axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
             .then((res) => setHabits(res.data))
@@ -41,8 +36,6 @@ export default function HabitsPage() {
         { name: 'd', id: 7 }
     ]
 
-
-
     const [isAddingHabit, setIsAddingHabit] = useState(false)
     const [habitsDays, setHabitsDays] = useState([])
     const [habitName, setHabitName] = useState("")
@@ -58,20 +51,16 @@ export default function HabitsPage() {
         }
         const days = [...habitsDays, day.id]
         setHabitsDays(days)
-        console.log(days)
-
     }
-
-
 
     function registerNewHabit(e) {
         e.preventDefault()
-        if(habitsDays.length < 1) {
+        if (habitsDays.length < 1) {
             alert("Escolhe pelo menos um dia da semana")
             return
         }
+
         setLoading(true)
-       
 
         const body = {
             name: habitName,
@@ -124,10 +113,6 @@ export default function HabitsPage() {
     function cancel() {
         setIsAddingHabit(false)
     }
-
-
-
-
 
     return (
         <>

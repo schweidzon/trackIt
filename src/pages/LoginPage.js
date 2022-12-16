@@ -16,6 +16,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("")
     const [disabled, setDisabled] = useState(false)
 
+    //BÔNUS DE LOGIN AUTOMÁTICO
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -36,7 +37,6 @@ export default function LoginPage() {
     function login(e) {
         e.preventDefault()
         setDisabled(true)
-
 
         const body = {
             email,
@@ -115,24 +115,12 @@ export default function LoginPage() {
                                     visible={true}
                                 />
                             </Loading>
-
-
                         }
-
-
-
-
                     </form>
                 </div>
                 <Link data-test="signup-link" to={"/cadastro"}>
                     <p data-test="signup-link" >Não tem conta? Cadastre-se</p>
                 </Link>
-                <div>
-
-
-
-                </div>
-
             </Login>
         </LoginContainer>
 
