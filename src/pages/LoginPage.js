@@ -10,7 +10,7 @@ import { ThreeDots } from 'react-loader-spinner'
 
 
 export default function LoginPage() {
-    const { setUser, setTodayHabits, setConcluded } = useContext(AppContext)
+    const { setUser, setTodayHabits, setConcluded, setCount } = useContext(AppContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -79,7 +79,7 @@ export default function LoginPage() {
                 const data = res.data
                 if (res.data.find((h) => h.done === true)) {
                     let count = 0
-                    res.data.forEach((h) => {
+                    data.forEach((h) => {
                         if (h.done === true) {
 
                             count = count + 1
@@ -90,6 +90,7 @@ export default function LoginPage() {
 
                 }
                 setTodayHabits(data)
+               
             })
     }
 

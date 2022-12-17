@@ -11,15 +11,23 @@ import { useLocation } from "react-router-dom";
 
 
 
+
 export default function TodayPage() {
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
-    const { user, setConcluded, todayHabits, setTodayHabits } = useContext(AppContext)
+    const { user, todayHabits, setTodayHabits, count, setConcluded } = useContext(AppContext)
     const [reload, setReload] = useState([])
     const location = useLocation()
 
+
+
+
+
+
     useEffect(() => {
+
+       
 
         const config = {
             headers: {
@@ -36,7 +44,9 @@ export default function TodayPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
 
-   
+    
+
+
 
     function render() {
         if (todayHabits.find((h) => h.done === true)) {
@@ -52,33 +62,36 @@ export default function TodayPage() {
             return `${((count / todayHabits.length) * 100).toFixed(2)}% dos hábitos concluídos`
 
         } else {
-
+            setConcluded(0)
             return 'Nenhum hábito concluído ainda'
         }
 
     }
 
 
-    function finishHabit(habit) {
-
+    function finishHabit(habit, i) {
+     
 
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
             }
         }
-        const body = {}
+
 
         if (habit.done === true) {
+          
 
-            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, body, config)
+            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, {}, config)
                 .then(() => {
                     setReload([])
                 })
             return
         } else {
+           
 
-            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, body, config)
+
+            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, {}, config)
                 .then(() => {
                     setReload([])
                 })
@@ -98,19 +111,18 @@ export default function TodayPage() {
             <Header data-test="header" />
             <HabitsPageStyle >
                 <Day concluded={(todayHabits.find((h) => h.done === true))}>
-                    {console.log(todayHabits)}
                     <h1 data-test="today">{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
-                    <p data-test="today-counter">{location.pathname === "/hoje" && render()}</p>
+                    <p data-test="today-counter">{location.pathname==="/hoje" && render()}</p>
                 </Day>
 
-                {todayHabits.map((h) =>
+                {todayHabits.map((h, i) =>
                     <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence && h.highestSequence > 0} >
                         <div>
                             <h1 data-test="today-habit-name">{h.name}</h1>
                             <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</span></p>
                             <p data-test="today-habit-record">Record: <span>{h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
                         </div>
-                        <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h)} done={h.done}></DoneButton>
+                        <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h, i)} done={h.done}></DoneButton>
                     </RegisteredHabits>
                 )}
             </HabitsPageStyle>
