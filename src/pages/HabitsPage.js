@@ -37,7 +37,7 @@ export default function HabitsPage() {
         { name: 'q', id: 4 },
         { name: 's', id: 5 },
         { name: 's', id: 6 },
-        { name: 'd', id: 7 }
+        { name: 'd', id: 0 }
     ]
 
 

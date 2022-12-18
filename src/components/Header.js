@@ -7,9 +7,7 @@ export default function Header() {
     const { user } = useContext(AppContext)
     return (
         <HeaderStyled>
-            <Link to="/">
-                <h1>TrackIt</h1>
-            </Link>
+            <h1>TrackIt</h1>
             <img src={user.image} alt="userImage" />
         </HeaderStyled>
     )
