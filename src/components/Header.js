@@ -1,5 +1,4 @@
 import { useContext } from "react"
-import { Link } from "react-router-dom"
 import styled from "styled-components"
 import AppContext from "../context/AppContext"
 

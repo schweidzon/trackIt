@@ -8,7 +8,8 @@ import Menu from "../components/Menu"
 import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
-    const { user, habits, setHabits, setConcluded } = useContext(AppContext)
+    const { user, setConcluded } = useContext(AppContext)
+    const [habits, setHabits] = useState([])
     const [loading, setLoading] = useState(false)
     const [isAddingHabit, setIsAddingHabit] = useState(false)
     const [habitsDays, setHabitsDays] = useState([])
@@ -29,7 +30,7 @@ export default function HabitsPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [setConcluded])
 
-    
+
     const DAYS = [
         { name: 's', id: 1 },
         { name: 't', id: 2 },

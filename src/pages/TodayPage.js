@@ -13,10 +13,10 @@ import { useLocation } from "react-router-dom";
 
 
 export default function TodayPage() {
+    const { user, todayHabits, setTodayHabits, setConcluded } = useContext(AppContext)
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
     const weekdayAbrev = weekday.split("-")[0]
     const day = (dayjs().format("DD/M"))
-    const { user, todayHabits, setTodayHabits, count, setConcluded } = useContext(AppContext)
     const [reload, setReload] = useState([])
     const location = useLocation()
 
