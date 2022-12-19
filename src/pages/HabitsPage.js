@@ -226,6 +226,7 @@ const AddHabitStyle = styled.div`
             color: #FFFFFF;
             text-align: center;
             border-style: none;
+            cursor: pointer;
             &:disabled {
                 background-color: #CFCFCF;
             }
@@ -326,6 +327,7 @@ const SendInfos = styled.div`
             font-size: 16px;
             color: #FFFFFF;
             border-style: none;
+            cursor: pointer;
         }
 `
 
