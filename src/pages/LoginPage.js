@@ -10,7 +10,7 @@ import { ThreeDots } from 'react-loader-spinner'
 
 
 export default function LoginPage() {
-    const { setUser, setTodayHabits, setConcluded } = useContext(AppContext)
+    const { setUser } = useContext(AppContext)
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -46,17 +46,13 @@ export default function LoginPage() {
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
             .then((res) => {
                 console.log(res.data)
-                setUser({
-                    email: res.data.email,
-                    id: res.data.id,
+                setUser({            
                     image: res.data.image,
-                    name: res.data.name,
-                    password: res.data.password,
                     token: res.data.token
                 })
                 setDisabled(false)
                 navigate("/hoje")
-                todayHabits(res.data.token)
+                //todayHabits(res.data.token)
 
             })
             .catch((err) => {
@@ -66,33 +62,33 @@ export default function LoginPage() {
 
     }
 
-    function todayHabits(token) {
-        console.log(token)
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }
+    // function todayHabits(token) {
+    //     console.log(token)
+    //     const config = {
+    //         headers: {
+    //             Authorization: `Bearer ${token}`
+    //         }
+    //     }
 
-        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
-            .then(res => {
-                const data = res.data
-                if (res.data.find((h) => h.done === true)) {
-                    let count = 0
-                    data.forEach((h) => {
-                        if (h.done === true) {
+    //     axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+    //         .then(res => {
+    //             const data = res.data
+    //             if (res.data.find((h) => h.done === true)) {
+    //                 let count = 0
+    //                 data.forEach((h) => {
+    //                     if (h.done === true) {
 
-                            count = count + 1
-                        }
+    //                         count = count + 1
+    //                     }
 
-                    })
-                    setConcluded(((count / res.data.length) * 100).toFixed(2))
+    //                 })
+    //                 setConcluded(((count / res.data.length) * 100).toFixed(2))
 
-                }
-                setTodayHabits(data)
+    //             }
+    //             setTodayHabits(data)
 
-            })
-    }
+    //         })
+    // }
 
 
 

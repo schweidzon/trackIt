@@ -7,11 +7,7 @@ import AppProvider from "./context/Provider";
 import TodayPage from "./pages/TodayPage";
 import HistoricPage from "./pages/HistoricPage";
 
-
-
 function App() {
-
-
   return (    
       <BrowserRouter>
         <GlobalStyle />

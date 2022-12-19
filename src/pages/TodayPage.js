@@ -8,10 +8,6 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
 
-
-
-
-
 export default function TodayPage() {
     const { user, todayHabits, setTodayHabits, setConcluded } = useContext(AppContext)
     const weekday = (new Date().toLocaleString('pt-br', { weekday: 'long' }))
@@ -20,15 +16,7 @@ export default function TodayPage() {
     const [reload, setReload] = useState([])
     const location = useLocation()
 
-
-
-
-
-
     useEffect(() => {
-
-       
-
         const config = {
             headers: {
                 Authorization: `Bearer ${user.token}`
@@ -43,10 +31,6 @@ export default function TodayPage() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reload])
-
-    
-
-
 
     function render() {
         if (todayHabits.find((h) => h.done === true)) {
@@ -65,12 +49,9 @@ export default function TodayPage() {
             setConcluded(0)
             return 'Nenhum hábito concluído ainda'
         }
-
     }
 
-
-    function finishHabit(habit, i) {
-     
+    function finishHabit(habit) {
 
         const config = {
             headers: {
@@ -98,14 +79,7 @@ export default function TodayPage() {
                 .catch(err => console.log(err.response.data))
         }
     }
-
-
-
-
-
-
-
-
+    
     return (
         <>
             <Header data-test="header" />
