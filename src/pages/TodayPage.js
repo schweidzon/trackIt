@@ -131,8 +131,7 @@ const HabitsPageStyle = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    background-color: #E5E5E5;
-    width: 100vw;
+    background-color: #E5E5E5;   
     overflow-y: auto;
     padding-bottom: 130px;
     min-height: calc(100vh - 70px);
