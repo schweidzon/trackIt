@@ -8,7 +8,7 @@ import Menu from "../components/Menu"
 import { ThreeDots } from "react-loader-spinner"
 
 export default function HabitsPage() {
-    const { user, setConcluded } = useContext(AppContext)
+    const { user, setConcluded, setTodayHabits } = useContext(AppContext)
     const [habits, setHabits] = useState([])
     const [loading, setLoading] = useState(false)
     const [isAddingHabit, setIsAddingHabit] = useState(false)
@@ -80,6 +80,7 @@ export default function HabitsPage() {
                 setLoading(false)
                 setHabitName("")
                 setHabitsDays([])
+                refreshTodayProgress()
 
             })
             .catch((err) => {
@@ -104,11 +105,41 @@ export default function HabitsPage() {
             axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`, config)
                 .then(() => {
                     setHabits(habits.filter((h) => h.id !== habit.id))
+                    refreshTodayProgress()
                 })
         } else {
             return
         }
 
+
+    }
+
+    function refreshTodayProgress() {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        }
+        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+                        .then(res => {
+                            const data = res.data
+                            console.log('2')
+                            setTodayHabits(data)
+                            if (data.find((h) => h.done === true)) {
+                                let count = 0
+                                data.forEach((h) => {
+                                    if (h.done === true) {
+                    
+                                        count = count + 1
+                                    }
+                    
+                                })
+                                setConcluded(((count / data.length) * 100).toFixed(2))                        
+                    
+                            } else {
+                                setConcluded(0)                       
+                            }
+                        })
 
     }
 
