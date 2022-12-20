@@ -90,11 +90,11 @@ export default function TodayPage() {
                 </Day>
 
                 {todayHabits.map((h, i) =>
-                    <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence && h.highestSequence > 0} >
+                    <RegisteredHabits data-test="today-habit-container" key={h.id} done={h.done} sequence={h.highestSequence === h.currentSequence && h.highestSequence > 0} >
                         <div>
                             <h1 data-test="today-habit-name">{h.name}</h1>
-                            <p data-test="today-habit-sequence">Sequência atual: <span data-test="today-habit-sequence">{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</span></p>
-                            <p data-test="today-habit-record">Record: <span data-test="today-habit-record" >  {h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
+                            <p data-test="today-habit-sequence">Sequência atual: <h4 >{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</h4></p>
+                            <p data-test="today-habit-record">Record: <span>  {h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
                         </div>
                         <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h, i)} done={h.done}></DoneButton>
                     </RegisteredHabits>
@@ -155,16 +155,25 @@ const RegisteredHabits = styled.div`
            margin-bottom: 8px;
            margin-top: 10px;
         }    
+       
+       
         
         p {
           font-size  :13px ;
           color: #666666;
           
-        }
-        span {
+        }   
+        h4 {
+            color: ${props => props.done ? '#8FC549' : "#666666"};
+            display: inline;
+
+        }    
+        span:last-of-type {
             color: ${props => props.sequence ? '#8FC549' : "#666666"};
         }
+    
 `
+
 
 const DoneButton = styled.button`
     width: 69px;
