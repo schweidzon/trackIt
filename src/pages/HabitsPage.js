@@ -166,7 +166,7 @@ export default function HabitsPage() {
                             </Days>
                             <SendInfos>
                                 <button type="button" disabled={loading} data-test="habit-create-cancel-btn" onClick={cancel}>Cancelar</button>
-                               <button data-test="habit-create-save-btn" disabled={loading} type="submit">{!disabled ? 'Salvar' :   <ThreeDots
+                               <button data-test="habit-create-save-btn" disabled={loading} type="submit">{!loading ? 'Salvar' :   <ThreeDots
                                             color="#FFFFFF"
                                             height="60"
                                             width="60"
