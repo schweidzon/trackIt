@@ -32,13 +32,13 @@ export default function HabitsPage() {
 
 
     const DAYS = [
+        { name: 'd', id: 0 },
         { name: 's', id: 1 },
         { name: 't', id: 2 },
         { name: 'q', id: 3 },
         { name: 'q', id: 4 },
         { name: 's', id: 5 },
         { name: 's', id: 6 },
-        { name: 'd', id: 0 }
     ]
 
 
