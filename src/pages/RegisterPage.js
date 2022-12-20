@@ -4,6 +4,7 @@ import { ThreeDots } from "react-loader-spinner"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import logo from "../assets/images/logo.png"
+import BASE_URL from "../constants/urls"
 
 export default function RegisterPage() {
     const navigate = useNavigate()
@@ -23,7 +24,7 @@ export default function RegisterPage() {
             image,
             password
         }
-        axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up", body)
+        axios.post(`${BASE_URL}/auth/sign-up`, body)
             .then((res) => {
                 console.log(res.data)
                 alert("Usuário cadastrado com sucesso!")

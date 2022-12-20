@@ -7,6 +7,7 @@ import AppContext from "../context/AppContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useLocation } from "react-router-dom";
+import BASE_URL from "../constants/urls"
 
 export default function TodayPage() {
     const { user, todayHabits, setTodayHabits, setConcluded } = useContext(AppContext)
@@ -23,7 +24,7 @@ export default function TodayPage() {
             }
         }
 
-        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+        axios.get(`${BASE_URL}/habits/today`, config)
             .then(res => {
                 const data = res.data
                 setTodayHabits(data)
@@ -62,8 +63,7 @@ export default function TodayPage() {
 
         if (habit.done === true) {
 
-
-            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, {}, config)
+            axios.post(`${BASE_URL}/habits/${habit.id}/uncheck`, {}, config)
                 .then(() => {
                     setReload([])
                 })
@@ -72,7 +72,7 @@ export default function TodayPage() {
 
 
 
-            axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, {}, config)
+            axios.post(`${BASE_URL}/habits/${habit.id}/check`, {}, config)
                 .then(() => {
                     setReload([])
                 })
@@ -93,8 +93,8 @@ export default function TodayPage() {
                     <RegisteredHabits data-test="today-habit-container" key={h.id} done={h.done} sequence={h.highestSequence === h.currentSequence && h.highestSequence > 0} >
                         <div>
                             <h1 data-test="today-habit-name">{h.name}</h1>
-                            <p data-test="today-habit-sequence">Sequência atual: <h4 >{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</h4></p>
-                            <p data-test="today-habit-record">Record: <span>  {h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
+                            <h3 data-test="today-habit-sequence">Sequência atual: <p >{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</p></h3>
+                            <h3 data-test="today-habit-record">Record: <span>  {h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </h3>
                         </div>
                         <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h, i)} done={h.done}></DoneButton>
                     </RegisteredHabits>
@@ -104,9 +104,6 @@ export default function TodayPage() {
         </>
     )
 }
-
-
-
 
 
 const Day = styled.div`
@@ -155,18 +152,13 @@ const RegisteredHabits = styled.div`
            margin-bottom: 8px;
            margin-top: 10px;
         }    
-       
-       
-        
-        p {
+        h3 {
           font-size  :13px ;
-          color: #666666;
-          
+          color: #666666;          
         }   
-        h4 {
+        p {
             color: ${props => props.done ? '#8FC549' : "#666666"};
             display: inline;
-
         }    
         span:last-of-type {
             color: ${props => props.sequence ? '#8FC549' : "#666666"};

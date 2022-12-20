@@ -1,30 +1,21 @@
-
-import axios from "axios"
-import { useContext, useEffect } from "react"
 import styled from "styled-components"
 import Header from "../components/Header"
 import Menu from "../components/Menu"
-import AppContext from "../context/AppContext"
-
-
-
-
 
 export default function HistoricPage() {
-    const { user } = useContext(AppContext)
+   
+    // useEffect(() => {
+    //     const config = {
+    //         headers: {
+    //             Authorization: `Bearer ${user.token}`
+    //         }
+    //     }
 
-    useEffect(() => {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${user.token}`
-            }
-        }
-
-        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily", config)
-            .then(res => console.log(res.data))
-            .catch((err) => console.log(err.responde.data))
-        // eslint-disable-next-line react-hooks/exhaustive-deps  
-    }, [])
+    //     axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily", config)
+    //         .then(res => console.log(res.data))
+    //         .catch((err) => console.log(err.responde.data))
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps  
+    // }, [])
 
     return (
         <>

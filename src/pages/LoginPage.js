@@ -1,10 +1,11 @@
 import axios from "axios"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import logo from "../assets/images/logo.png"
 import AppContext from "../context/AppContext"
 import { ThreeDots } from 'react-loader-spinner'
+import BASE_URL from "../constants/urls"
 
 
 
@@ -18,19 +19,19 @@ export default function LoginPage() {
 
     //BÔNUS DE LOGIN AUTOMÁTICO
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         if (localStorage.getItem("user")) {
-    //             const user = localStorage.getItem("user")
-    //             const user2 = JSON.parse(user)
-    //             setUser(user2)
-    //             navigate("/hoje")
-    //             todayHabits(user2.token)
-    //         }
-    //     }, 500)
+    useEffect(() => {
 
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps     
-    // }, [])
+        if (localStorage.getItem("user")) {
+            const user = localStorage.getItem("user")
+            const userJSON = JSON.parse(user)
+            setUser(userJSON)
+            navigate("/hoje")
+           
+        }
+
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps     
+    }, [])
 
 
 
@@ -43,7 +44,7 @@ export default function LoginPage() {
             password
         }
 
-        axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
+        axios.post(`${BASE_URL}/auth/login`, body)
             .then((res) => {
                 console.log(res.data)
                 setUser({
@@ -60,36 +61,7 @@ export default function LoginPage() {
                 window.location.reload()
             })
 
-    }
-
-    // function todayHabits(token) {
-    //     console.log(token)
-    //     const config = {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         }
-    //     }
-
-    //     axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
-    //         .then(res => {
-    //             const data = res.data
-    //             if (res.data.find((h) => h.done === true)) {
-    //                 let count = 0
-    //                 data.forEach((h) => {
-    //                     if (h.done === true) {
-
-    //                         count = count + 1
-    //                     }
-
-    //                 })
-    //                 setConcluded(((count / res.data.length) * 100).toFixed(2))
-
-    //             }
-    //             setTodayHabits(data)
-
-    //         })
-    // }
-
+    } 
 
 
     return (

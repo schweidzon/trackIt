@@ -6,6 +6,7 @@ import AppContext from "../context/AppContext"
 import trashCan from "../assets/images/trashCan.png"
 import Menu from "../components/Menu"
 import { ThreeDots } from "react-loader-spinner"
+import BASE_URL from "../constants/urls"
 
 export default function HabitsPage() {
     const { user, setConcluded, setTodayHabits } = useContext(AppContext)
@@ -23,7 +24,7 @@ export default function HabitsPage() {
             }
         }
 
-        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+        axios.get(`${BASE_URL}/habits`, config)
             .then((res) => setHabits(res.data))
             .catch((err) => console.log(err.response.data))
 
@@ -73,7 +74,7 @@ export default function HabitsPage() {
                 Authorization: `Bearer ${user.token}`
             }
         }
-        axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config)
+        axios.post(`${BASE_URL}/habits`, body, config)
             .then((res) => {
                 setHabits([...habits, res.data])
                 setIsAddingHabit(false)
@@ -102,7 +103,7 @@ export default function HabitsPage() {
             }
         }
         if (window.confirm("Deseja apagar o hábito?")) {
-            axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}`, config)
+            axios.delete(`${BASE_URL}/habits/${habit.id}`, config)
                 .then(() => {
                     setHabits(habits.filter((h) => h.id !== habit.id))
                     refreshTodayProgress()
@@ -120,16 +121,15 @@ export default function HabitsPage() {
                 Authorization: `Bearer ${user.token}`
             }
         }
-        axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config)
+        axios.get(`${BASE_URL}/habits/today`, config)
                         .then(res => {
                             const data = res.data
-                            console.log('2')
+                          
                             setTodayHabits(data)
                             if (data.find((h) => h.done === true)) {
                                 let count = 0
                                 data.forEach((h) => {
-                                    if (h.done === true) {
-                    
+                                    if (h.done === true) {                    
                                         count = count + 1
                                     }
                     
