@@ -166,9 +166,7 @@ export default function HabitsPage() {
                             </Days>
                             <SendInfos>
                                 <button type="button" disabled={loading} data-test="habit-create-cancel-btn" onClick={cancel}>Cancelar</button>
-                                {!loading ? <button data-test="habit-create-save-btn" disabled={loading} type="submit">Salvar</button> :
-                                    <Loading disabled={true}>
-                                        <ThreeDots
+                               <button data-test="habit-create-save-btn" disabled={loading} type="submit">{!disabled ? 'Salvar' :   <ThreeDots
                                             color="#FFFFFF"
                                             height="60"
                                             width="60"
@@ -176,9 +174,8 @@ export default function HabitsPage() {
                                             wrapperStyle={{}}
                                             wrapperClassName=""
                                             visible={true}
-                                        />
-                                    </Loading>
-                                }
+                                        />}</button> :
+                                    
                             </SendInfos>
                         </div>
                     </form>
@@ -359,6 +356,9 @@ const SendInfos = styled.div`
             color: #FFFFFF;
             border-style: none;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 `
 
@@ -386,16 +386,3 @@ const RegisteredHabits = styled.div`
 `
 
 
-const Loading = styled.button`
-     width: 84px;
-     height: 35px;
-     background: #52B6FF;
-     border-radius: 5px;
-     font-size: 16px;
-     color: #FFFFFF;
-     border-style: none;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-        
-`
