@@ -61,7 +61,7 @@ export default function TodayPage() {
 
 
         if (habit.done === true) {
-          
+
 
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/uncheck`, {}, config)
                 .then(() => {
@@ -69,7 +69,7 @@ export default function TodayPage() {
                 })
             return
         } else {
-           
+
 
 
             axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habit.id}/check`, {}, config)
@@ -79,22 +79,22 @@ export default function TodayPage() {
                 .catch(err => console.log(err.response.data))
         }
     }
-    
+
     return (
         <>
             <Header data-test="header" />
             <HabitsPageStyle >
                 <Day concluded={(todayHabits.find((h) => h.done === true))}>
                     <h1 data-test="today">{`${weekdayAbrev.charAt(0).toUpperCase() + weekdayAbrev.slice(1)}, ${day}`}</h1>
-                    <p data-test="today-counter">{location.pathname==="/hoje" && render()}</p>
+                    <p data-test="today-counter">{location.pathname === "/hoje" && render()}</p>
                 </Day>
 
                 {todayHabits.map((h, i) =>
                     <RegisteredHabits data-test="today-habit-container" key={h.id} sequence={h.highestSequence === h.currentSequence && h.highestSequence > 0} >
                         <div>
                             <h1 data-test="today-habit-name">{h.name}</h1>
-                            <p data-test="today-habit-sequence">Sequência atual: <span>{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</span></p>
-                            <p data-test="today-habit-record">Record: <span>{h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
+                            <p data-test="today-habit-sequence">Sequência atual: <span data-test="today-habit-sequence">{h.currentSequence} {h.currentSequence > 1 ? 'dias' : h.currentSequence === 0 ? '' : 'dia'}</span></p>
+                            <p data-test="today-habit-record">Record: <span data-test="today-habit-record" >  {h.highestSequence} {h.highestSequence > 1 ? 'dias' : h.highestSequence === 0 ? '' : 'dia'}</span> </p>
                         </div>
                         <DoneButton data-test="today-habit-check-btn" onClick={() => finishHabit(h, i)} done={h.done}></DoneButton>
                     </RegisteredHabits>
