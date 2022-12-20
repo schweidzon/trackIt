@@ -174,7 +174,7 @@ export default function HabitsPage() {
                                             wrapperStyle={{}}
                                             wrapperClassName=""
                                             visible={true}
-                                        />}</button> :
+                                        />}</button>
                                     
                             </SendInfos>
                         </div>
