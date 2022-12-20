@@ -46,7 +46,7 @@ export default function LoginPage() {
         axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body)
             .then((res) => {
                 console.log(res.data)
-                setUser({            
+                setUser({
                     image: res.data.image,
                     token: res.data.token
                 })
@@ -100,19 +100,16 @@ export default function LoginPage() {
                     <form disabled={disabled} onSubmit={login}>
                         <input data-test="email-input" disabled={disabled} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="email" />
                         <input data-test="password-input" disabled={disabled} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="senha" />
-                        {!disabled ? <button data-test="login-btn" disabled={disabled} type="submit">Entrar</button> :
-                            <Loading disabled={true}>
-                                <ThreeDots
-                                    color="#FFFFFF"
-                                    height="60"
-                                    width="60"
-                                    ariaLabel="three-dots-loading"
-                                    wrapperStyle={{}}
-                                    wrapperClassName=""
-                                    visible={true}
-                                />
-                            </Loading>
-                        }
+                        <button data-test="login-btn" disabled={disabled} type="submit">{!disabled ? 'Entrar' :
+                            <ThreeDots
+                                color="#FFFFFF"
+                                height="60"
+                                width="60"
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperClassName=""
+                                visible={true}
+                            />}</button>
                     </form>
                 </div>
                 <Link data-test="signup-link" to={"/cadastro"}>
@@ -169,7 +166,10 @@ const LoginContainer = styled.div`
             font-weight: 400;
             font-size: 20.976px;
             margin-bottom: 20px;
-            color: #FFFFFF;
+            color: #FFFFFF;          
+            display: flex;
+            justify-content: center;
+            align-items: center;
              &:active {
                 box-shadow: rgba(50, 50, 93, 0.25) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.3) 0px 10px 30px -18px inset;
              }
@@ -195,21 +195,3 @@ const Login = styled.div`
 `
 
 
-const Loading = styled.button`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 303px;
-    height: 45px;
-    background: #52B6FF;
-    border-radius: 5px;
-    border-style: none;
-    cursor: pointer;
-    font-family: 'Lexend Deca';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20.976px;    
-    color: #FFFFFF;
-     
-        
-`

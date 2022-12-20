@@ -48,21 +48,16 @@ export default function RegisterPage() {
                         <input data-test="password-input" disabled={disabled} type="password" onChange={(e) => setPassword(e.target.value)} placeholder="senha" />
                         <input data-test="user-name-input" disabled={disabled} type="name" onChange={(e) => setName(e.target.value)} placeholder="nome" />
                         <input data-test="user-image-input" disabled={disabled} type="url" onChange={(e) => setImage(e.target.value)} placeholder="foto" />
-                        {!disabled ? <button data-test="signup-btn" disabled={disabled} type="submit">Cadastrar</button> :
-                            <Loading disabled={true}>
-                                <ThreeDots
-                                    color="#FFFFFF"
-                                    height="60"
-                                    width="60"
-                                    ariaLabel="three-dots-loading"
-                                    wrapperStyle={{}}
-                                    wrapperClassName=""
-                                    visible={true}
-                                />
-                            </Loading>
-
-
-                        }
+                        <button data-test="signup-btn" disabled={disabled} type="submit">{!disabled ? 'Cadastrar' :
+                            <ThreeDots
+                                color="#FFFFFF"
+                                height="60"
+                                width="60"
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperClassName=""
+                                visible={true}
+                            />}</button>
                     </form>
                 </div>
                 <Link data-test="login-link" to="/">
@@ -121,6 +116,9 @@ const RegisterContainer = styled.div`
             font-weight: 400;
             font-size: 20.976px;
             color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
              &:active {
                 box-shadow: rgba(50, 50, 93, 0.25) 0px 10px 30px -12px inset, rgba(0, 0, 0, 0.3) 0px 10px 30px -18px inset;
              }
@@ -145,23 +143,6 @@ const Register = styled.div`
     align-items: center;
 `
 
-const Loading = styled.button`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 303px;
-    height: 45px;
-    background: #52B6FF;
-    border-radius: 5px;
-    border-style: none;
-    cursor: pointer;
-    font-family: 'Lexend Deca';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20.976px;    
-    color: #FFFFFF;
-     
-        
-`
+
 
 

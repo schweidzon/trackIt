@@ -9,7 +9,7 @@ export default function Menu() {
     const { concluded } = useContext(AppContext)
 
     return (
-        <MenuStyle>
+        <MenuStyle data-test="menu">
             <Link data-test="habit-link" to={"/habitos"}>
                 <p>Hábitos</p>
             </Link>

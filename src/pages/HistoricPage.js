@@ -36,7 +36,7 @@ export default function HistoricPage() {
                     <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
                 </Day>
 
-                <Menu data-test="menu" />
+                <Menu  />
 
             </HistoricPageStyle>
 
